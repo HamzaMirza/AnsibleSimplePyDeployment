@@ -1,0 +1,2 @@
+ansible_ssh_user: user1
+ansible_host: 192.168.0.42

@@ -1,0 +1,2 @@
+[db_and_webservers]
+db_and_webserver_1 ansible_ssh_user=user1 ansible_host=192.168.0.44 ansible_ssh_password=tpstps ansible_become_user=root ansible_become_password=tpstps

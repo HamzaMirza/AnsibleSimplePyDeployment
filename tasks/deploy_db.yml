@@ -1,21 +1,67 @@
+    - name: Install Python cryptography
+      pip:
+        name: cryptography
+        state: present    
+    
+    - name: 1.Check if EPEL repo is already configured.
+      stat: 
+        path: /etc/yum.repos.d/mysql-community.repo
+      register: mysql80_repofile_result
+
+    - name: 2.Install EPEL repo.
+      yum:
+        name: https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+        state: present
+      register: result
+      when: not mysql80_repofile_result.stat.exists
+
     - name: Install MySql Database
       yum: 
         name:
           - mysql-server
-          - mysql-client
+          - mysql
+          - MySQL-python
         state: installed
-        
 
     - name: Start MySql Service
       service: 
-        name: mysql
+        name: mysqld
         state: started
         enabled: yes
+      become: yes
+
+    - name: Remove Test database if it exist.
+      mysql_db: 
+        name: test 
+        state: absent
+        login_host: "localhost"
+        login_user: root
+        login_password: TpsTps_12345
+
+    - name: Remove All Anonymous User Accounts
+      mysql_user: 
+        name: ""
+        host_all: yes
+        login_host: "localhost"
+        login_user: root
+        login_password: TpsTps_12345
+        state: absent
+
+    - name: Change root password
+      mysql_user: 
+        name: root 
+        host: localhost
+        password: TpsTps_12345
+        login_user: root
+        login_password: TpsTps_12345
 
     - name: Create Application Database
-      mysql_db: 
+      mysql_db:
         name: "{{ db_name }}"
         state: present
+        login_user: root
+        login_password: TpsTps_12345
+        
 
     - name: Create Database User
       mysql_user: 
@@ -24,3 +70,5 @@
         priv: '*.*:ALL'
         state: present
         host: '%'
+        login_user: root
+        login_password: TpsTps_12345

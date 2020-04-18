@@ -7,7 +7,7 @@
         - flask-mysql
 
     - name: Copy Source Code
-      copy: src=Artifacts/app.py dest=/opt/app.py
+      copy: src=../Artifacts/app.py dest=/opt/app.py
 
-    # - name: Start Web Server
-    #   shell: FLASK_APP=/opt/app.py nohup flask run --host=0.0.0.0 &
+    - name: Start Web Server
+      shell: FLASK_APP=/opt/app.py nohup flask run --host=0.0.0.0 &
